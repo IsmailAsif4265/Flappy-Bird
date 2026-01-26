@@ -40,6 +40,12 @@ def textScreen(text, color, x, y):
     screen_text=font.render(text, True, color)
     gameWindow.blit(screen_text, [x, y])
 
+def snakePlot(gameWindow, color, snake_list, snake_size):
+    for x, y in snake_list:
+        pygame.draw.rect(gameWindow, color, [x, y, snake_size, snake_size])
+
+snake_list=[]
+snake_len=1
 #Game Loop
 while not exit_game:
     for event in pygame.event.get():
@@ -72,11 +78,20 @@ while not exit_game:
         print("Score:", score)
         food_x=random.randint(20, temp_w)
         food_y=random.randint(20, temp_h)
+        snake_len+=5
 
     gameWindow.fill(white)
     textScreen("Score:"+str(score), red, 5, 5)
     pygame.draw.rect(gameWindow, red, [food_x, food_y, snake_size, snake_size])
-    pygame.draw.rect(gameWindow, black, [snake_x, snake_y, snake_size, snake_size])
+    snake_head=[]
+    snake_head.append(snake_x)
+    snake_head.append(snake_y)
+    snake_list.append(snake_head)
+
+    if len(snake_list)>snake_len:
+        del snake_list[0]
+    #pygame.draw.rect(gameWindow, black, [snake_x, snake_y, snake_size, snake_size])
+    snakePlot(gameWindow, black, snake_list, snake_size)
     pygame.display.update()
     clock.tick(fps)
 
